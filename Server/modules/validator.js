@@ -1,4 +1,4 @@
-import { objectLiteral } from "../interfaces";
+import { objectLiteral } from '../interfaces';
 
 export const emailRegex = /^[A-Za-z0-9.-_]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
 
@@ -10,35 +10,31 @@ export const addressRegex = /./;
 
 export const phoneNumberRegex = /[\d]{11,}/;
 
-export const magicTrimmer = (payload: objectLiteral): objectLiteral => {
+export const magicTrimmer = payload => {
   const data = {};
 
   Object.keys(payload).forEach(key => {
-    const value: any = payload[key];
+    const value = payload[key];
     Object.assign(data, { [key]: value.trim() });
   });
 
   return data;
 };
 
-export const validateAgainstRegex = (
-  value: string,
-  regex: RegExp,
-  regexType: string
-): any => {
-  let errorMessage: string = "";
+export const validateAgainstRegex = (value, regex, regexType) => {
+  let errorMessage = '';
 
   if (!value) return null;
 
   switch (regexType) {
-    case "password": {
+    case 'password': {
       errorMessage =
-        "password must contain at least eight characters, one Uppercase letter, one lowercase letter, and one digit";
+        'password must contain at least eight characters, one Uppercase letter, one lowercase letter, and one digit';
       break;
     }
 
-    case "phone_number": {
-      errorMessage = "phone number is not valid";
+    case 'phone_number': {
+      errorMessage = 'phone number is not valid';
       break;
     }
 
@@ -53,8 +49,8 @@ export const validateAgainstRegex = (
   return undefined;
 };
 
-export const errorChecker = (payload: objectLiteral): string[] | null => {
-  const result: any = {};
+export const errorChecker = payload => {
+  const result = {};
 
   Object.keys(payload).forEach(key => {
     if (payload[key]) {

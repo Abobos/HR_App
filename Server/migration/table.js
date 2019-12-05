@@ -1,6 +1,6 @@
 import '@babel/polyfill';
 import db from '../config/pool';
-import logger from '../utils/logger';
+import logger from '../utils';
 
 const createUsersTable = `
   DROP TABLE IF EXISTS users CASCADE;
@@ -47,7 +47,7 @@ const createFlagsTable = `
 const migrateDB = async () => {
   try {
     await db.query(
-      `${createUsersTable} ${createPropertiesTable} ${createFlagsTable}`
+      `${createUsersTable} ${createPropertiesTable} ${createFlagsTable}`,
     );
     logger('migration:database', 'Table Created');
     process.exit();

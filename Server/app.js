@@ -1,6 +1,7 @@
 import express from 'express';
-
 import indexRoute from './routes';
+import cors from 'cors';
+import bodyParser from 'body-parser';
 import defaultErrorHandler from './middlewares/error';
 
 class App {
@@ -16,8 +17,9 @@ class App {
   }
 
   middlewares() {
-    this.app.use(express.json());
-    this.app.use(express.urlencoded({ extended: false }));
+    this.app.use(bodyParser.json());
+    this.app.use(bodyParser.urlencoded({ extended: false }));
+    this.app.use(cors());
 
     this.app.use(indexRoute);
 
@@ -33,4 +35,4 @@ class App {
   }
 }
 
-export default App;
+export default new App();
