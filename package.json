@@ -10,7 +10,9 @@
     "start": "set DEBUG=*:server && node build/server.js",
     "dev:start": "set DEBUG=*:server && nodemon --exec babel-node ./Server/server.js",
     "migrate-db": "set DEBUG=*:database && node ./build/migration/table.js",
-    "db:migrate": "set DEBUG=*:database && babel-node ./Server/migration/table.js"
+    "db:migrate": "set DEBUG=*:database && babel-node ./Server/migration/table.js",
+    "db:seed": "set DEBUG=*:database && babel-node ./Server/migration/seed.js",
+    "seed": "set DEBUG=*:database && babel-node ./build/migration/table.js"
   },
   "repository": {
     "type": "git",
@@ -35,7 +37,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.0",
-    "bcrypt": "^3.0.6",
+    "@sendgrid/mail": "^6.4.0",
     "body-parser": "^1.19.0",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",

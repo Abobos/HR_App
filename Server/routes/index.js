@@ -1,11 +1,21 @@
 import { Router } from 'express';
 
-const indexRoute = Router();
+import authRoute from '../routes/auth';
 
-indexRoute.get('/', (req, res) => {
+import { NotFoundError } from '../exceptions';
+
+const router = Router();
+
+router.use('/api/v1/auth', authRoute);
+
+router.get('/', (req, res) => {
   res.status(200).json({
-    message: 'Welcome to the API',
+    message: 'Welcome to the HR API',
   });
 });
 
-export default indexRoute;
+router.all('/*', (req, res) => {
+  throw new NotFoundError('This route is unavailable on the server');
+});
+
+export default router;

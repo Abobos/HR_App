@@ -1,14 +1,8 @@
-import { objectLiteral } from '../interfaces';
-
 export const emailRegex = /^[A-Za-z0-9.-_]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
 
 export const passwordRegex = /(?=^.{8,}$)(?=.*[a-z].*)(?=.*[A-Z].*)(?=.*[0-9].*)/;
 
 export const nameRegex = /^[A-Za-z]+\s([A-Za-z]+\s)?[A-Za-z]+$/;
-
-export const addressRegex = /./;
-
-export const phoneNumberRegex = /[\d]{11,}/;
 
 export const magicTrimmer = payload => {
   const data = {};

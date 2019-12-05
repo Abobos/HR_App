@@ -2,12 +2,13 @@ import logger from '../utils';
 
 const defaultErrorHandler = app =>
   app.use((error, req, res, next) => {
+    const statusCode = error.statusCode || 500;
     process.env.NODE_ENV !== 'production' &&
-      (error.statusCode === 500 && logger(`Error:server`, error.stack));
+      (statusCode === 500 && logger(`Error:server`, error.stack));
 
-    res.status(error.statusCode).send({
+    res.status(statusCode).send({
       status: 'error',
-      error: error.statusCode === 500 ? 'Internal Server Error' : error.message
+      error: statusCode === 500 ? 'Internal Server Error' : error.message,
     });
   });
 
