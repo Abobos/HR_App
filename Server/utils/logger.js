@@ -1,7 +1,8 @@
-import debug from 'debug';
+import Debug from 'debug';
 
-const logger = (nameSpace, message) => {
-  return debug(nameSpace)(message);
+const logger = (namespace, message) => {
+  const log = Debug(`${namespace}`);
+  return log(`${message}`);
 };
 
 export default logger;

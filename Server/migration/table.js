@@ -46,7 +46,9 @@ const createFlagsTable = `
 
 const migrateDB = async () => {
   try {
-    await db.query(`${createUsersTable} ${createPropertiesTable} ${createFlagsTable}`);
+    await db.query(
+      `${createUsersTable} ${createPropertiesTable} ${createFlagsTable}`
+    );
     logger('migration:database', 'Table Created');
     process.exit();
   } catch (error) {
