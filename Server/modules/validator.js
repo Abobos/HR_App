@@ -48,7 +48,6 @@ export const errorChecker = payload => {
       result[key] = payload[key];
     } else if (payload[key] === null) {
       const strippedKey = removedash(key);
-
       result[key] = `${strippedKey} is required`;
     }
   });

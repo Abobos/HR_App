@@ -6,39 +6,39 @@ const hrs = `
   DROP TABLE IF EXISTS hrs CASCADE;
   CREATE TABLE hrs(
     id SERIAL PRIMARY KEY,
-    first_name VARCHAR(128) NOT NULL,
-    last_name VARCHAR(128) NOT NULL,
+    first_name VARCHAR(128),
+    last_name VARCHAR(128),
     email VARCHAR(60) NOT NULL,
     password VARCHAR(128) NOT NULL,
     is_admin BOOLEAN NOT NULL DEFAULT false,
     created_at DATE NOT NULL DEFAULT NOW()
 );`;
 
-// const templates = `
-//   DROP TABLE IF EXISTS templates CASCADE;
-//   CREATE TABLE templates(
-//     id SERIAL PRIMARY KEY,
-//     template_name VARCHAR(128) NOT NULL,
-//     owner INT NOT NULL,
-//     status NOT NULL DEFAULT 'save',
-//     last_modified TIMESTAMP NOT NULL,
-// );`;
+const templates = `
+  DROP TABLE IF EXISTS templates CASCADE;
+  CREATE TABLE templates(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(128) NOT NULL,
+    owner INT NOT NULL,
+    status VARCHAR(128) NOT NULL,
+    recipients VARCHAR(128)[] NOT NULL,
+    file_name VARCHAR(60), 
+    FOREIGN KEY (owner) REFERENCES "hrs" (id) ON UPDATE CASCADE ON DELETE CASCADE
+);`;
 
-// const documents = `
-//     DROP TABLE IF EXITS documents CASCADE;
-//     CREATE TABLE documents(
-//       id SERIAL PRIMARY KEY,
-//       document_name VARCHAR(128) NOT NULL,
-//       owner INT NOT NULL,
-//       recipients VARCHAR(128) NOT NULL,
-//       last_modified date,
-//       status VARCHAR(128) NOT NULL DEFAULT 'draft',
-//       template_id NOT NULL
-//     );`;
+const documents = `
+    DROP TABLE IF EXISTS documents CASCADE;
+    CREATE TABLE documents(
+      id SERIAL PRIMARY KEY,
+      name VARCHAR(128) NOT NULL,
+      status VARCHAR(128) NOT NULL DEFAULT 'in-progress',
+      template_id INT NOT NULL,
+      FOREIGN KEY (template_id) REFERENCES "templates" (id) ON UPDATE CASCADE ON DELETE CASCADE
+    );`;
 
 const migrateDB = async () => {
   try {
-    await db.query(`${hrs}`);
+    await db.query(`${hrs} ${templates} ${documents}`);
     logger('migration:database', 'Table Created');
   } catch (error) {
     logger('migration:database', `${error}: Table not created`);

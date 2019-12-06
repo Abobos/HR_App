@@ -19,5 +19,3 @@ export const authenticateUser = (req, res, next) => {
     next(error);
   }
 };
-
-export default verifyToken;
