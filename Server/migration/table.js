@@ -10,7 +10,7 @@ const hrs = `
     last_name VARCHAR(128),
     email VARCHAR(60) NOT NULL,
     password VARCHAR(128) NOT NULL,
-    is_admin BOOLEAN NOT NULL DEFAULT false,
+    is_admin BOOLEAN NOT NULL DEFAULT true,
     created_at DATE NOT NULL DEFAULT NOW()
 );`;
 
@@ -31,6 +31,7 @@ const documents = `
     CREATE TABLE documents(
       id SERIAL PRIMARY KEY,
       name VARCHAR(128) NOT NULL,
+      owner INT NOT NULL,
       status VARCHAR(128) NOT NULL DEFAULT 'in-progress',
       template_id INT NOT NULL,
       FOREIGN KEY (template_id) REFERENCES "templates" (id) ON UPDATE CASCADE ON DELETE CASCADE

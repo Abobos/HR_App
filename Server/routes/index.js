@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import authRoute from '../routes/auth';
 import templateRoute from '../routes/template';
+import documentRoute from '../routes/document';
 
 const router = Router();
 
@@ -13,6 +14,7 @@ router.get('/', (req, res) => {
 
 router.use('/api/v1/auth', authRoute);
 router.use('/api/v1', templateRoute);
+router.use('/api/v1', documentRoute);
 
 router.all('/*', (req, res) => {
   res.status(400).send({
