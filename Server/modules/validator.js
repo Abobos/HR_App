@@ -1,8 +1,10 @@
+import { removedash } from '../utils';
+
 export const emailRegex = /^[A-Za-z0-9.-_]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
 
 export const passwordRegex = /(?=^.{8,}$)(?=.*[a-z].*)(?=.*[A-Z].*)(?=.*[0-9].*)/;
 
-export const nameRegex = /^[A-Za-z]+\s([A-Za-z]+\s)?[A-Za-z]+$/;
+export const nameRegex = /^[a-zA-Z]+$/;
 
 export const magicTrimmer = payload => {
   const data = {};
@@ -27,11 +29,6 @@ export const validateAgainstRegex = (value, regex, regexType) => {
       break;
     }
 
-    case 'phone_number': {
-      errorMessage = 'phone number is not valid';
-      break;
-    }
-
     default: {
       errorMessage = `${regexType} is not valid`;
       break;
@@ -50,7 +47,9 @@ export const errorChecker = payload => {
     if (payload[key]) {
       result[key] = payload[key];
     } else if (payload[key] === null) {
-      result[key] = `${key} is required`;
+      const strippedKey = removedash(key);
+
+      result[key] = `${strippedKey} is required`;
     }
   });
 

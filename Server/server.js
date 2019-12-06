@@ -3,7 +3,7 @@ import http from 'http';
 
 import expressApp from './app';
 
-import logger from './utils';
+import { logger } from './utils';
 
 const PORT = expressApp.getPort();
 

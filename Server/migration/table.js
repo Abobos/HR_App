@@ -1,6 +1,6 @@
 import '@babel/polyfill';
 import db from '../config/pool';
-import logger from '../utils/index';
+import { logger } from '../utils';
 
 const hrs = `
   DROP TABLE IF EXISTS hrs CASCADE;
@@ -10,7 +10,8 @@ const hrs = `
     last_name VARCHAR(128) NOT NULL,
     email VARCHAR(60) NOT NULL,
     password VARCHAR(128) NOT NULL,
-    is_admin BOOLEAN NOT NULL DEFAULT false
+    is_admin BOOLEAN NOT NULL DEFAULT false,
+    created_at DATE NOT NULL DEFAULT NOW()
 );`;
 
 // const templates = `

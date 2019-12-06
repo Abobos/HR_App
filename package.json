@@ -1,11 +1,9 @@
 {
-  "name": "propertypro",
+  "name": "HR_App",
   "version": "1.0.0",
   "description": "PropertyPro is a platform where people can create and/or search property for sale or rent",
   "main": "server.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=test npm run db:migrate && cross-env NODE_ENV=test nyc mocha --require @babel/register --no-timeout './Server/tests/*.js' --exit",
-    "coverage": "npm test && nyc report --reporter=lcov --reporter=text-lcov | coveralls",
     "build": "babel Server --out-dir build",
     "start": "set DEBUG=*:server && node build/server.js",
     "dev:start": "set DEBUG=*:server && nodemon --exec babel-node ./Server/server.js",
@@ -38,6 +36,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.4.0",
     "@sendgrid/mail": "^6.4.0",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",

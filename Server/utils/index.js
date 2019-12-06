@@ -1,8 +1,16 @@
-import Debug from 'debug';
+import { hashPassword, comparePassword } from './hashPassword';
 
-const logger = (namespace, message) => {
-  const log = Debug(`${namespace}`);
-  return log(`${message}`);
+import { logger } from './logger';
+
+import { createToken, verifyToken } from './tokenHandler';
+
+import removedash from './removedash';
+
+export {
+  logger,
+  removedash,
+  hashPassword,
+  comparePassword,
+  createToken,
+  verifyToken,
 };
-
-export default logger;

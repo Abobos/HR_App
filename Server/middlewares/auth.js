@@ -6,17 +6,24 @@ import {
   errorChecker,
   magicTrimmer,
 } from '../modules/validator';
+
 import { sendErrorResponse } from '../modules/sendResponse';
 
 export const validator = (req, res, next) => {
   const userData = magicTrimmer(req.body);
 
-  const { name, email, password } = userData;
+  const {
+    first_name: firstName,
+    last_name: lastName,
+    email,
+    password,
+  } = userData;
 
   let schema;
 
   const signUpschema = {
-    name: validateAgainstRegex(name, nameRegex, 'name'),
+    first_name: validateAgainstRegex(firstName, nameRegex, 'first name'),
+    last_name: validateAgainstRegex(lastName, nameRegex, 'last name'),
     email: validateAgainstRegex(email, emailRegex, 'email'),
     password: validateAgainstRegex(password, passwordRegex, 'password'),
   };
