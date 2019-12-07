@@ -3,15 +3,19 @@ import { AuthenticationError } from '../exceptions';
 
 export const authenticateUser = (req, res, next) => {
   try {
-    if (!req.headers.authorization)
-      throw new AuthenticationError('Please provide a token');
+    let token =
+      req.headers.authorization &&
+      (req.headers.authorization.split(' ')[1] || req.headers.authorization);
 
-    const token =
-      req.headers.authorization.split(' ')[1] || req.headers.authorization;
+    if (req.query.token) token = req.query.token;
+
+    if (!token) {
+      throw new AuthenticationError('Please provide a token');
+    }
 
     const decoded = verifyToken(token);
 
-    req.decoded = decoded;
+    req.locals = decoded;
 
     next();
   } catch (err) {

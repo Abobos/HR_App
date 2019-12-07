@@ -12,4 +12,10 @@ documentRouter.get(
   DocumentController.getAllDocuments,
 );
 
+documentRouter.get(
+  '/document/:id',
+  authenticateUser,
+  DocumentController.getSpecificDocument,
+);
+
 export default documentRouter;

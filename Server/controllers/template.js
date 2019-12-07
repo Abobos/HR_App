@@ -2,7 +2,6 @@ import UniversalModel from '../models';
 
 import { sendSuccessResponse } from '../modules/sendResponse';
 
-import { convertToArray } from '../utils/convertToArray';
 import { generatePassword, hashPassword } from '../utils';
 
 import sendMail from '../services/sendMail';
@@ -30,7 +29,7 @@ class Template {
 
   static async create(req, res, next) {
     try {
-      const { id: hrId, email: hrEmail } = req.decoded;
+      const { id: hrId, email: hrEmail } = req.locals;
       let { name, recipient, action } = req.body;
 
       const documentFilename = req.files[0].filename;
@@ -44,12 +43,6 @@ class Template {
       let queryDetailsII;
 
       if (action === 'send') {
-        const createdRecipient = await Template.createLogin(recipient);
-
-        const response = await sendMail(createdRecipient, hrEmail);
-
-        console.log(response);
-
         const queryDetailsIII = {
           columns: '*',
           condition: `owner = ${hrId} AND name = '${name}'`,
@@ -66,7 +59,17 @@ class Template {
 
         const document = await Document.create(queryDetailsII);
 
-        return sendSuccessResponse(res, 201, { ...template, document });
+        const createdRecipient = await Template.createLogin(recipient);
+
+        const link = `${req.protocol}://${req.headers.host}/document/${document.id}`;
+
+        const response = await sendMail(createdRecipient, hrEmail, link);
+
+        return sendSuccessResponse(res, 201, {
+          ...template,
+          document,
+          mailStatus: response,
+        });
       }
 
       sendSuccessResponse(res, 201, template);
@@ -77,7 +80,7 @@ class Template {
 
   static async getAllTemplates(req, res, next) {
     try {
-      const { id: hrId } = req.decoded;
+      const { id: hrId } = req.locals;
 
       let queryDetailsI = {
         columns: '*',
