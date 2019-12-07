@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export default class MailHandler {
-  static async sendEmail(email, firstname, password) {
+  static async sendEmail(email, password, token) {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -14,13 +14,21 @@ export default class MailHandler {
     });
 
     const mailOptions = {
-      from: 'noreply@propertyprolite.com',
+      from: 'notifications@GTBankHRApp.com',
       to: email,
-      subject: 'Here is your new password',
-      html: `<p>Dear ${firstname},</p>
-    <p>Find your new password below</p>
-    <p><b>New Password</b>: ${password}</p>
-    <p><em>Note that you can simply change this password to the one most preferred by you</em></p>`,
+      subject: 'Signature Request',
+      html: `<p>Hello there</p>
+      <p>Trust this meets you well</p>
+
+    <div style="background-color: orange; color: white"><p>Document Signature Request</p></div>
+    <p>Click on this <a href="localhost:8080/api/v1/document?token=${token}>link</a>and use the login details below to access your document</p>
+    <p><b>email</b>: ${email}
+    <b>password</b>: ${password}
+    </p>
+
+    <h4 style="color: orange">Disclaimer</h4>
+    <p><em>Note that this is an auto generated email. If you have any questions about the document, 
+    kindly email to the sender directly</em></p>`,
     };
 
     try {
@@ -29,6 +37,7 @@ export default class MailHandler {
         return 'success';
       }
     } catch (error) {
+      console.log(error);
       return 'fail';
     }
   }

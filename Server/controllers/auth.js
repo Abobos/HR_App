@@ -42,6 +42,7 @@ class AuthController {
           email,
           isAdmin,
         }),
+        isAdmin,
       });
     } catch (e) {
       return next(e);
@@ -78,6 +79,7 @@ class AuthController {
           email,
           isAdmin,
         }),
+        isAdmin,
       });
     } catch (err) {
       return next(err);

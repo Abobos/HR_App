@@ -5,55 +5,38 @@ import { sendSuccessResponse } from '../modules/sendResponse';
 import { convertToArray } from '../utils/convertToArray';
 import { generatePassword, hashPassword } from '../utils';
 
+import sendMail from '../services/sendMail';
+
 const TemplateResource = new UniversalModel('templates');
 const Document = new UniversalModel('documents');
 const User = new UniversalModel('hrs');
 
 class Template {
-  static async createLogin(recipients) {
-    const users = [];
+  static async createLogin(recipient) {
+    const recipientPassword = generatePassword();
 
-    const passwords = [];
+    const hashedPassword = hashPassword(recipientPassword);
 
-    for (let recipient of recipients) {
-      const recipientsPassword = generatePassword();
+    const queryDetailsI = {
+      columns: 'email, password, is_admin',
+      values: `'${recipient}', '${hashedPassword}', false `,
+    };
 
-      passwords.push(recipientsPassword);
+    const createdUser = await User.create(queryDetailsI);
+    createdUser.password = recipientPassword;
 
-      const hashedPassword = hashPassword(recipientsPassword);
-
-      const queryDetailsI = {
-        columns: 'email, password, is_admin',
-        values: `${recipient}, '${hashedPassword}', false `,
-      };
-
-      users.push(User.create(queryDetailsI));
-    }
-
-    let createdUsers = await Promise.all(users);
-
-    createdUsers = createdUsers.map((createdUser, i) => {
-      createdUser.password = passwords[i];
-      return createdUser;
-    });
-
-    return createdUsers;
+    return createdUser;
   }
 
   static async create(req, res, next) {
     try {
-      const { id: hrId } = req.decoded;
-      let { name, recipients, action } = req.body;
+      const { id: hrId, email: hrEmail } = req.decoded;
+      let { name, recipient, action } = req.body;
 
       const documentFilename = req.files[0].filename;
-
-      const groupRecipients = convertToArray(recipients).map(
-        email => `'${email}'`,
-      );
-
       let queryDetailsI = {
-        columns: 'name, owner, status, recipients, file_name',
-        values: `'${name}', ${hrId}, 'draft', ARRAY [${groupRecipients}], '${documentFilename}'`,
+        columns: 'name, owner, status, recipient, file_name',
+        values: `'${name}', ${hrId}, 'draft', '${recipient}', '${documentFilename}'`,
       };
 
       const template = await TemplateResource.create(queryDetailsI);
@@ -61,12 +44,11 @@ class Template {
       let queryDetailsII;
 
       if (action === 'send') {
-        const createdRecipients = await Template.createLogin(groupRecipients);
+        const createdRecipient = await Template.createLogin(recipient);
 
-        createdRecipients.forEach(createdRecipient => {
-          createdRecipients.password;
-        });
-        console.log(createdRecipients);
+        const response = await sendMail(createdRecipient, hrEmail);
+
+        console.log(response);
 
         const queryDetailsIII = {
           columns: '*',

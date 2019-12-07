@@ -21,7 +21,7 @@ const templates = `
     name VARCHAR(128) NOT NULL,
     owner INT NOT NULL,
     status VARCHAR(128) NOT NULL,
-    recipients VARCHAR(128)[] NOT NULL,
+    recipient VARCHAR(50) NOT NULL,
     file_name VARCHAR(60), 
     FOREIGN KEY (owner) REFERENCES "hrs" (id) ON UPDATE CASCADE ON DELETE CASCADE
 );`;

@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import jwt from 'jsonwebtoken';
+import { AuthenticationError } from '../exceptions';
 
 export const createToken = payload => {
   const token = jwt.sign(payload, process.env.JWT_KEY, {
@@ -9,6 +10,10 @@ export const createToken = payload => {
 };
 
 export const verifyToken = token => {
-  const verifiedToken = jwt.verify(token, process.env.JWT_KEY);
-  return verifiedToken;
+  try {
+    const verifiedToken = jwt.verify(token, process.env.JWT_KEY);
+    return verifiedToken;
+  } catch (e) {
+    throw new AuthenticationError('Authentication Failed');
+  }
 };
