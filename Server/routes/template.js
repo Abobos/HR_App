@@ -15,4 +15,7 @@ templateRouter.post(
 
 templateRouter.get('/template', authenticateUser, Template.getAllTemplates);
 
+templateRouter.put('/template/:id', authenticateUser, Template.edit);
+
+templateRouter.delete('/template/:id', authenticateUser, Template.delete);
 export default templateRouter;

@@ -5,6 +5,7 @@ import { sendSuccessResponse } from '../modules/sendResponse';
 import { generatePassword, hashPassword } from '../utils';
 
 import sendMail from '../services/sendMail';
+import { NotFoundError } from '../exceptions';
 
 const TemplateResource = new UniversalModel('templates');
 const Document = new UniversalModel('documents');
@@ -32,7 +33,10 @@ class Template {
       const { id: hrId, email: hrEmail } = req.locals;
       let { name, recipient, action } = req.body;
 
-      const documentFilename = req.files[0].filename;
+      let documentFilename;
+
+      if (req.files.length) documentFilename = req.files[0].filename;
+
       let queryDetailsI = {
         columns: 'name, owner, status, recipient, file_name',
         values: `'${name}', ${hrId}, 'draft', '${recipient}', '${documentFilename}'`,
@@ -65,6 +69,13 @@ class Template {
 
         const response = await sendMail(createdRecipient, hrEmail, link);
 
+        if (response === 'success') {
+          await TemplateResource.update({
+            values: `status = 'active'`,
+            condition: `id = ${templateId}`,
+          });
+        }
+
         return sendSuccessResponse(res, 201, {
           ...template,
           document,
@@ -92,6 +103,56 @@ class Template {
       sendSuccessResponse(res, 200, templates.rows);
     } catch (e) {
       return next(e);
+    }
+  }
+
+  static async edit(req, res, next) {
+    try {
+      const { id: templateId } = req.params;
+
+      const { name } = template;
+
+      const fileName = req.files[0].filename;
+
+      const template = await TemplateResource.select({
+        columns: '*',
+        condition: `id = ${templateId}`,
+      });
+
+      const updatedName = name || template.rows[0].name;
+      const updatedfileName = fileName || template.rows[0].file_name;
+
+      const updatedTemplate = await TemplateResource.update({
+        values: `name = '${updatedName}' AND file_name = '${updatedfileName}'`,
+        condition: `id = ${templateId}`,
+      });
+
+      sendSuccessResponse(res, 200, updatedTemplate);
+    } catch (err) {
+      return next(err);
+    }
+  }
+
+  static async delete(req, res, next) {
+    try {
+      const { id: templateId } = req.params;
+
+      const template = await TemplateResource.select({
+        columns: '*',
+        condition: `id = ${templateId}`,
+      });
+
+      if (!template) throw new NotFoundError('This template does not exist');
+
+      await TemplateResource.delete({
+        condition: `id: ${templateId}`,
+      });
+
+      sendSuccessResponse(res, 200, {
+        message: 'Template deleted successfully',
+      });
+    } catch (err) {
+      return next(err);
     }
   }
 }
