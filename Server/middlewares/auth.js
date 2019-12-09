@@ -33,7 +33,7 @@ export const validator = (req, res, next) => {
     password: validateAgainstRegex(password, passwordRegex, 'password'),
   };
 
-  req.route.path === '/signup'
+  req.route.path === '/register'
     ? (schema = signUpschema)
     : (schema = signinSchema);
 
