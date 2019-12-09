@@ -65,13 +65,10 @@ class Template {
 
         const createdRecipient = await Template.createLogin(recipient);
 
-        const usertoken = createToken({ email: createdRecipient.email });
-
         const link = `${req.protocol}://${req.headers.host}/document/${document.id}`;
 
-        // const response = await sendMail(createdRecipient, hrEmail, link);
+        const response = await sendMail(createdRecipient, hrEmail, link);
 
-        const response = 'success';
         if (response === 'success') {
           await TemplateResource.update({
             values: `status = 'active'`,
@@ -83,7 +80,6 @@ class Template {
           ...template,
           document,
           mailStatus: response,
-          token: usertoken,
         });
       }
 
