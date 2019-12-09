@@ -1,6 +1,3 @@
-// const setPrototypeOf = (payload: objectLiteral, parent: InternalServerError) =>
-//   Object.setPrototypeOf(payload, parent);
-
 export class InternalServerError extends Error {
   constructor(message, code = 500) {
     super(message);
@@ -13,6 +10,14 @@ export class InternalServerError extends Error {
 
 export class AuthenticationError extends InternalServerError {
   constructor(message, code = 401) {
+    super(message, code);
+
+    this.name = this.constructor.name;
+  }
+}
+
+export class ValidationError extends InternalServerError {
+  constructor(message, code = 422) {
     super(message, code);
 
     this.name = this.constructor.name;

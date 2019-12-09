@@ -2,7 +2,7 @@ import UniversalModel from '../models';
 
 import { sendSuccessResponse } from '../modules/sendResponse';
 
-import { generatePassword, hashPassword } from '../utils';
+import { generatePassword, hashPassword, createToken } from '../utils';
 
 import sendMail from '../services/sendMail';
 import { NotFoundError } from '../exceptions';
@@ -65,10 +65,13 @@ class Template {
 
         const createdRecipient = await Template.createLogin(recipient);
 
+        const usertoken = createToken({ email: createdRecipient.email });
+
         const link = `${req.protocol}://${req.headers.host}/document/${document.id}`;
 
-        const response = await sendMail(createdRecipient, hrEmail, link);
+        // const response = await sendMail(createdRecipient, hrEmail, link);
 
+        const response = 'success';
         if (response === 'success') {
           await TemplateResource.update({
             values: `status = 'active'`,
@@ -80,6 +83,7 @@ class Template {
           ...template,
           document,
           mailStatus: response,
+          token: usertoken,
         });
       }
 
@@ -146,6 +150,10 @@ class Template {
 
       await TemplateResource.delete({
         condition: `id: ${templateId}`,
+      });
+
+      await Document.delete({
+        condition: `template_id: ${templateId}`,
       });
 
       sendSuccessResponse(res, 200, {

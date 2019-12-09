@@ -1,7 +1,5 @@
 import nodemailer from 'nodemailer';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import 'dotenv/config';
 
 export default class MailHandler {
   static async sendEmail(email, password, hrEmail, token, link) {
@@ -20,7 +18,7 @@ export default class MailHandler {
       html: `<p>Hello there,</p>
       <p>Trust this meets you well.</p>
 
-    <div style="background-color: orange; color: white; padding: 1px 1px"><p>Document Signature Request</p></div>
+    <div style="background-color: orange; color: white; padding: 0.03px 0.03px"><p>Document Signature Request</p></div>
     <p>Click on this <a href='${link}?token=${token}'>LINK</a> and use the login details below to access the document</p>
     <p><b>email</b>: <span style="text-decoration: none">${email}</span><br>
     <b>password</b>: ${password}
@@ -38,7 +36,7 @@ export default class MailHandler {
         return 'success';
       }
     } catch (error) {
-      console.error(error);
+      logger(`email:server`, error);
       return 'fail';
     }
   }
