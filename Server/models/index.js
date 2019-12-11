@@ -18,7 +18,7 @@ class UniversalModel {
   }
 
   async select(queryDetails) {
-    const queryStatement = `SELECT ${queryDetails.columns} FROM ${this.resource} WHERE ${queryDetails.condition}`;
+    const queryStatement = `SELECT ${queryDetails.columns} FROM ${this.resource} WHERE ${queryDetails.condition} ORDER BY DESC`;
 
     logger(`queryStatement:server`, queryStatement);
 
