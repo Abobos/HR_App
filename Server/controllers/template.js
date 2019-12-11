@@ -67,8 +67,7 @@ class Template {
           values: `'${documentName}', ${hrId}, ${templateId}`,
         };
 
-
-        const document = await Document.create(queryDetailsII);
+        // const document = await Document.create(queryDetailsII);
 
         const createdRecipient = await Template.createLogin(recipient);
 
@@ -84,7 +83,9 @@ class Template {
         }
 
         return sendSuccessResponse(res, 201, {
-          ...template
+          ...template,
+          document,
+          mailStatus: response,
         });
       }
 
