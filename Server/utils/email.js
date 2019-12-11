@@ -21,6 +21,7 @@ export default class MailHandler {
       <p>Trust this meets you well.</p>
 
     <div style="background-color: orange; color: white; padding: 0.03px 0.03px"><p>Document Signature Request</p></div>
+    
     <p>Click on this <a href='${link}?token=${token}'>LINK</a> and use the login details below to access the document</p>
   
     <h5 style="color: orange">Disclaimer:</h5>

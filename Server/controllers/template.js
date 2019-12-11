@@ -2,17 +2,16 @@ import UniversalModel from '../models';
 
 import { sendSuccessResponse } from '../modules/sendResponse';
 
-import { generatePassword, hashPassword, createToken } from '../utils';
+import { createToken } from '../utils';
 
 import MailHandler from '../utils/email';
-import { NotFoundError, InternalServerError } from '../exceptions';
+import { NotFoundError } from '../exceptions';
 
 const TemplateResource = new UniversalModel('templates');
 const Document = new UniversalModel('documents');
 const User = new UniversalModel('hrs');
 
 class Template {
-
   static async create(req, res, next) {
     try {
       const { id: hrId, email: hrEmail } = req.locals;
@@ -50,14 +49,12 @@ class Template {
 
         const link = 'https://hr-app3.netlify.com/signature';
 
-        const response = await MailHandler.sendMail(recipient, hrEmail, createToken({email}), link);
-
-        if (response === 'success') {
-          await TemplateResource.update({
-            values: `status = 'active'`,
-            condition: `id = ${templateId}`,
-          });
-        }
+        const response = await MailHandler.sendEmail(
+          recipient,
+          hrEmail,
+          createToken({ email: recipient }),
+          link,
+        );
 
         return sendSuccessResponse(res, 201, {
           ...template,
@@ -90,8 +87,7 @@ class Template {
 
       const owner = await User.select(queryDetails);
 
-      const templatesMapped = templates.rows.map((template) => {
-
+      const templatesMapped = templates.rows.map(template => {
         const templateStripped = {
           id: template.id,
           name: template.name,
@@ -99,11 +95,10 @@ class Template {
           recipient: template.recipient,
           status: template.status,
           created_at: template.created_at,
-        }
+        };
 
         return templateStripped;
-       
-      })
+      });
 
       sendSuccessResponse(res, 200, templatesMapped);
     } catch (e) {
