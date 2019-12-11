@@ -15,6 +15,8 @@ class Template {
   static async createLogin(recipient) {
     const recipientPassword = generatePassword();
 
+    console.log("I'm here")
+
     const hashedPassword = hashPassword(recipientPassword);
 
     const queryDetailsI = {
@@ -61,6 +63,7 @@ class Template {
           values: `'${documentName}', ${hrId}, ${templateId}`,
         };
 
+console.log("propose")
         const document = await Document.create(queryDetailsII);
 
         const createdRecipient = await Template.createLogin(recipient);
