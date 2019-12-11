@@ -5,7 +5,7 @@ import { sendSuccessResponse } from '../modules/sendResponse';
 import { generatePassword, hashPassword, createToken } from '../utils';
 
 import sendMail from '../services/sendMail';
-import { NotFoundError } from '../exceptions';
+import { NotFoundError, InternalServerError } from '../exceptions';
 
 const TemplateResource = new UniversalModel('templates');
 const Document = new UniversalModel('documents');
@@ -13,7 +13,8 @@ const User = new UniversalModel('hrs');
 
 class Template {
   static async createLogin(recipient) {
-    const recipientPassword = generatePassword();
+    try {
+      const recipientPassword = generatePassword();
 
     console.log("I'm here")
 
@@ -28,6 +29,9 @@ class Template {
     createdUser.password = recipientPassword;
 
     return createdUser;
+  } catch (e) {
+    throw new InternalServerError(e)
+  }
   }
 
   static async create(req, res, next) {
