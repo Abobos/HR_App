@@ -84,7 +84,6 @@ class Template {
 
         return sendSuccessResponse(res, 201, {
           ...template,
-          document,
           mailStatus: response,
         });
       }
