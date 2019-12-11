@@ -1,6 +1,8 @@
 import nodemailer from 'nodemailer';
 import 'dotenv/config';
 
+import { logger } from "./logger"
+
 export default class MailHandler {
   static async sendEmail(email, password, hrEmail, token, link) {
     const transporter = nodemailer.createTransport({
@@ -12,7 +14,7 @@ export default class MailHandler {
     });
 
     const mailOptions = {
-      from: 'notifications@GTBankHRApp.com',
+      from: 'GTBank-HRApp <notifications@GTBankHRApp.com>',
       to: email,
       subject: 'Document Signature Request',
       html: `<p>Hello there,</p>

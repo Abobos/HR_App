@@ -8,6 +8,7 @@ import path from 'path';
 import { pdfManipulator } from '../utils';
 
 const Document = new UniversalModel('documents');
+const User = new UniversalModel('hrs');
 const Template = new UniversalModel('templates');
 
 class DocumentController {
@@ -48,7 +49,42 @@ class DocumentController {
 
       const documents = await Document.select(queryDetails);
 
-      sendSuccessResponse(res, 200, documents.rows);
+
+      const queryDetailsI = {
+        columns: 'first_name, last_name',
+        condition: `id = ${hrId}`,
+        
+      };
+
+   
+
+      const owner = await User.select(queryDetailsI);
+
+
+      const documentsMapped = documents.rows.map(async(document) => {
+
+      const template = await Template.select({
+        columns: 'recipient',
+        condition: `id = ${document.template_id}`
+      })
+
+        const documentStripped = {
+          id: document.id,
+          name: document.name,
+          full_name: `${owner.rows[0].first_name} ${owner.rows[0].last_name}`,
+          recipient: template.rows[0].recipient,
+          status: document.status,  
+          created_at: document.created_at,
+        }
+
+        return documentStripped;
+       
+      })
+
+
+const documentsMappedII = await Promise.all(documentsMapped);
+
+      sendSuccessResponse(res, 200, documentsMappedII);
     } catch (e) {
       return next(e);
     }

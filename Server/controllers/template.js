@@ -100,7 +100,29 @@ class Template {
 
       const templates = await TemplateResource.select(queryDetailsI);
 
-      sendSuccessResponse(res, 200, templates.rows);
+      const queryDetails = {
+        columns: 'first_name, last_name',
+        condition: `id = ${hrId}`,
+      };
+
+      const owner = await User.select(queryDetails);
+
+      const templatesMapped = templates.rows.map((template) => {
+
+        const templateStripped = {
+          id: template.id,
+          name: template.name,
+          full_name: `${owner.rows[0].first_name} ${owner.rows[0].last_name}`,
+          recipient: template.recipient,
+          status: template.status,
+          created_at: template.created_at,
+        }
+
+        return templateStripped;
+       
+      })
+
+      sendSuccessResponse(res, 200, templatesMapped);
     } catch (e) {
       return next(e);
     }
@@ -145,11 +167,11 @@ class Template {
       if (!template) throw new NotFoundError('This template does not exist');
 
       await TemplateResource.delete({
-        condition: `id: ${templateId}`,
+        condition: `id = ${templateId}`,
       });
 
       await Document.delete({
-        condition: `template_id: ${templateId}`,
+        condition: `template_id = ${templateId}`,
       });
 
       sendSuccessResponse(res, 200, {

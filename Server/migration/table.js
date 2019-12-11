@@ -23,6 +23,7 @@ const templates = `
     status VARCHAR(128) NOT NULL,
     recipient VARCHAR(50) NOT NULL,
     file_name VARCHAR(60), 
+        created_at DATE NOT NULL DEFAULT NOW(),
     FOREIGN KEY (owner) REFERENCES "hrs" (id) ON UPDATE CASCADE ON DELETE CASCADE
 );`;
 
@@ -34,6 +35,7 @@ const documents = `
       owner INT NOT NULL,
       status VARCHAR(128) NOT NULL DEFAULT 'in-progress',
       template_id INT NOT NULL,
+        created_at DATE NOT NULL DEFAULT NOW(),
       FOREIGN KEY (template_id) REFERENCES "templates" (id) ON UPDATE CASCADE ON DELETE CASCADE
     );`;
 
