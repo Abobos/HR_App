@@ -4,7 +4,7 @@ import { sendSuccessResponse } from '../modules/sendResponse';
 
 import { generatePassword, hashPassword, createToken } from '../utils';
 
-import sendMail from '../services/sendMail';
+import MailHandler from '../utils/email';
 import { NotFoundError, InternalServerError } from '../exceptions';
 
 const TemplateResource = new UniversalModel('templates');
@@ -12,27 +12,6 @@ const Document = new UniversalModel('documents');
 const User = new UniversalModel('hrs');
 
 class Template {
-  static async createLogin(recipient) {
-    try {
-      const recipientPassword = generatePassword();
-
-    console.log("I'm here")
-
-    const hashedPassword = hashPassword(recipientPassword);
-
-    const queryDetailsI = {
-      columns: 'email, password, is_admin',
-      values: `'${recipient}', '${hashedPassword}', false `,
-    };
-
-    const createdUser = await User.create(queryDetailsI);
-    createdUser.password = recipientPassword;
-
-    return createdUser;
-  } catch (e) {
-    throw new InternalServerError(e)
-  }
-  }
 
   static async create(req, res, next) {
     try {
@@ -58,22 +37,20 @@ class Template {
           condition: `owner = ${hrId} AND name = '${name}'`,
         };
 
-        // const { rows } = await TemplateResource.select(queryDetailsIII);
+        const { rows } = await TemplateResource.select(queryDetailsIII);
 
-        // const { id: templateId, name: documentName } = rows[0];
+        const { id: templateId, name: documentName } = rows[0];
 
-        // queryDetailsII = {
-        //   columns: 'name, owner, template_id',
-        //   values: `'${documentName}', ${hrId}, ${templateId}`,
-        // };
+        queryDetailsII = {
+          columns: 'name, owner, template_id',
+          values: `'${documentName}', ${hrId}, ${templateId}`,
+        };
 
-        // const document = await Document.create(queryDetailsII);
-
-        const createdRecipient = await Template.createLogin(recipient);
+        const document = await Document.create(queryDetailsII);
 
         const link = 'https://hr-app3.netlify.com/signature';
 
-        const response = await sendMail(createdRecipient, hrEmail, link);
+        const response = await MailHandler.sendMail(recipient, hrEmail, createToken({email}), link);
 
         if (response === 'success') {
           await TemplateResource.update({
@@ -84,6 +61,7 @@ class Template {
 
         return sendSuccessResponse(res, 201, {
           ...template,
+          document,
           mailStatus: response,
         });
       }

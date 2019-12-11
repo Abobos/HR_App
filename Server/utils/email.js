@@ -4,7 +4,7 @@ import 'dotenv/config';
 import { logger } from "./logger"
 
 export default class MailHandler {
-  static async sendEmail(email, password, hrEmail, token, link) {
+  static async sendEmail(email, hrEmail, token, link) {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -22,10 +22,7 @@ export default class MailHandler {
 
     <div style="background-color: orange; color: white; padding: 0.03px 0.03px"><p>Document Signature Request</p></div>
     <p>Click on this <a href='${link}?token=${token}'>LINK</a> and use the login details below to access the document</p>
-    <p><b>email</b>: <span style="text-decoration: none">${email}</span><br>
-    <b>password</b>: ${password}
-    </p>
-
+  
     <h5 style="color: orange">Disclaimer:</h5>
     <em>Note that this is an auto generated email. If you have any questions about the document, 
     please contact ${hrEmail}
