@@ -67,10 +67,10 @@ class Template {
           values: `'${documentName}', ${hrId}, ${templateId}`,
         };
 
-console.log("propose")
+
         const document = await Document.create(queryDetailsII);
 
-        const createdRecipient = await Template.createLogin(recipient);
+        // const createdRecipient = await Template.createLogin(recipient);
 
         const link = 'https://hr-app3.netlify.com/signature';
 
