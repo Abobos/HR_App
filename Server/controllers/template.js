@@ -58,14 +58,14 @@ class Template {
           condition: `owner = ${hrId} AND name = '${name}'`,
         };
 
-        const { rows } = await TemplateResource.select(queryDetailsIII);
+        // const { rows } = await TemplateResource.select(queryDetailsIII);
 
-        const { id: templateId, name: documentName } = rows[0];
+        // const { id: templateId, name: documentName } = rows[0];
 
-        queryDetailsII = {
-          columns: 'name, owner, template_id',
-          values: `'${documentName}', ${hrId}, ${templateId}`,
-        };
+        // queryDetailsII = {
+        //   columns: 'name, owner, template_id',
+        //   values: `'${documentName}', ${hrId}, ${templateId}`,
+        // };
 
         // const document = await Document.create(queryDetailsII);
 
