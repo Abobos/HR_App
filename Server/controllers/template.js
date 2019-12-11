@@ -70,18 +70,18 @@ class Template {
 
         const document = await Document.create(queryDetailsII);
 
-        // const createdRecipient = await Template.createLogin(recipient);
+        const createdRecipient = await Template.createLogin(recipient);
 
-        // const link = 'https://hr-app3.netlify.com/signature';
+        const link = 'https://hr-app3.netlify.com/signature';
 
-        // const response = await sendMail(createdRecipient, hrEmail, link);
+        const response = await sendMail(createdRecipient, hrEmail, link);
 
-        // if (response === 'success') {
-        //   await TemplateResource.update({
-        //     values: `status = 'active'`,
-        //     condition: `id = ${templateId}`,
-        //   });
-        // }
+        if (response === 'success') {
+          await TemplateResource.update({
+            values: `status = 'active'`,
+            condition: `id = ${templateId}`,
+          });
+        }
 
         return sendSuccessResponse(res, 201, {
           ...template
