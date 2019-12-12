@@ -15,6 +15,7 @@ class Template {
   static async create(req, res, next) {
     try {
       const { id: hrId, email: hrEmail } = req.locals;
+
       let { name, recipient, action } = req.body;
 
       let documentFilename;
@@ -30,32 +31,28 @@ class Template {
 
       let queryDetailsII;
 
-      if (action === 'send') {
-        queryDetailsII = {
-          columns: 'name, owner, template_id',
-          values: `'${template.name}', ${hrId}, ${template.id}`,
-        };
+      queryDetailsII = {
+        columns: 'name, owner, template_id',
+        values: `'${template.name}', ${hrId}, ${template.id}`,
+      };
 
-        const link = 'https://hr-app3.netlify.com/signature';
+      const link = 'https://hr-app3.netlify.com/signature';
 
-        const token = createToken({ email: recipient });
+      const token = createToken({ email: recipient });
 
-        const response = await MailHandler.sendEmail(
-          recipient,
-          hrEmail,
-          token,
-          link,
-        );
+      const response = await MailHandler.sendEmail(
+        recipient,
+        hrEmail,
+        token,
+        link,
+      );
 
-        // const document = await Document.create(queryDetailsII);
+      // const document = await Document.create(queryDetailsII);
 
-        return sendSuccessResponse(res, 201, {
-          ...template,
-          mailStatus: response,
-        });
-      }
-
-      sendSuccessResponse(res, 201, template);
+      sendSuccessResponse(res, 201, {
+        ...template,
+        mailStatus: response,
+      });
     } catch (e) {
       next(e);
     }
