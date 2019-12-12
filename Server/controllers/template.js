@@ -38,10 +38,12 @@ class Template {
 
         const link = 'https://hr-app3.netlify.com/signature';
 
+        const token = createToken({ email: recipient });
+
         const response = await MailHandler.sendEmail(
           recipient,
           hrEmail,
-          createToken({ email: recipient }),
+          token,
           link,
         );
 
