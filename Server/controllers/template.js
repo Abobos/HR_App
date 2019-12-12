@@ -106,11 +106,30 @@ class Template {
     }
   }
 
+   static async getTemplate(req, res, next) {
+    try {
+      const { id: templateId } = req.params;
+
+      let queryDetailsI = {
+        columns: '*',
+        condition: `id = ${templateId}`,
+      };
+
+      const templates = await TemplateResource.select(queryDetailsI);
+
+
+
+      sendSuccessResponse(res, 200, templates.rows);
+    } catch (e) {
+      return next(e);
+    }
+  }
+
   static async edit(req, res, next) {
     try {
       const { id: templateId } = req.params;
 
-      const { name } = template;
+      const { name, recipient } = req.body;
 
       const fileName = req.files[0].filename;
 
@@ -123,7 +142,7 @@ class Template {
       const updatedfileName = fileName || template.rows[0].file_name;
 
       const updatedTemplate = await TemplateResource.update({
-        values: `name = '${updatedName}' AND file_name = '${updatedfileName}'`,
+        values: `name = '${updatedName}', recipient = '${recipient}', file_name = '${updatedfileName}'`,
         condition: `id = ${templateId}`,
       });
 

@@ -13,7 +13,8 @@ templateRouter.post(
   Template.create,
 );
 templateRouter.get('/template', authenticateUser, Template.getAllTemplates);
-templateRouter.put('/template/:id', authenticateUser, Template.edit);
+templateRouter.get('/template/:id', authenticateUser, Template.getTemplate);
+templateRouter.put('/template/:id', authenticateUser,  upload.array('docs', 2),Template.edit);
 templateRouter.delete('/template/:id', authenticateUser, Template.delete);
 
 export default templateRouter;

@@ -22,7 +22,7 @@ export default class MailHandler {
 
     <div style="background-color: orange; color: white; padding: 0.03px 0.03px"><p>Document Signature Request</p></div>
     
-    <p>Click on this <a href='${link}?token=${token}'>LINK</a> and use the login details below to access the document</p>
+    <p>Click on this <a href='${link}?token=${token}'>LINK</a> and upload your signature</p>
   
     <h5 style="color: orange">Disclaimer:</h5>
     <em>Note that this is an auto generated email. If you have any questions about the document, 
