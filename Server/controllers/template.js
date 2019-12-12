@@ -32,11 +32,6 @@ class Template {
       let queryDetailsII;
 
       if (action === 'send') {
-        const queryDetailsIII = {
-          columns: '*',
-          condition: `owner = ${hrId} AND name = '${name}'`,
-        };
-
         queryDetailsII = {
           columns: 'name, owner, template_id',
           values: `'${template.name}', ${hrId}, ${template.id}`,
@@ -45,15 +40,15 @@ class Template {
        
         const link = 'https://hr-app3.netlify.com/signature';
 
-        // const response = await MailHandler.sendEmail(
-        //   recipient,
-        //   hrEmail,
-        //   createToken({ email: recipient }),
-        //   link,
-        // );
+        const response = await MailHandler.sendEmail(
+          recipient,
+          hrEmail,
+          createToken({ email: recipient }),
+          link,
+        );
 
 
- const document = await Document.create(queryDetailsII);
+        const document = await Document.create(queryDetailsII);
 
         return sendSuccessResponse(res, 201, {
           ...template,
