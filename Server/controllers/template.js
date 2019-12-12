@@ -42,8 +42,7 @@ class Template {
           values: `'${template.name}', ${hrId}, ${template.id}`,
         };
 
-        const document = await Document.create(queryDetailsII);
-
+       
         const link = 'https://hr-app3.netlify.com/signature';
 
         const response = await MailHandler.sendEmail(
@@ -52,6 +51,9 @@ class Template {
           createToken({ email: recipient }),
           link,
         );
+
+
+ const document = await Document.create(queryDetailsII);
 
         return sendSuccessResponse(res, 201, {
           ...template,
