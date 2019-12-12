@@ -40,18 +40,17 @@ class Template {
 
       const token = createToken({ email: recipient });
 
-      const response = await MailHandler.sendEmail(
-        recipient,
-        hrEmail,
-        token,
-        link,
-      );
+      // const response = await MailHandler.sendEmail(
+      //   recipient,
+      //   hrEmail,
+      //   token,
+      //   link,
+      // );
 
       // const document = await Document.create(queryDetailsII);
 
       sendSuccessResponse(res, 201, {
         ...template,
-        mailStatus: response,
       });
     } catch (e) {
       next(e);
