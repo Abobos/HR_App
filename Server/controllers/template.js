@@ -28,6 +28,7 @@ class Template {
 
       const template = await TemplateResource.create(queryDetailsI);
 
+
       let queryDetailsII;
 
       if (action === 'send') {
@@ -36,16 +37,12 @@ class Template {
           condition: `owner = ${hrId} AND name = '${name}'`,
         };
 
-        const { rows } = await TemplateResource.select(queryDetailsIII);
-
-        const { id: templateId, name: documentName } = rows[0];
-
         queryDetailsII = {
           columns: 'name, owner, template_id',
-          values: `'${documentName}', ${hrId}, ${templateId}`,
+          values: `'${template.name}', ${hrId}, ${template.id}`,
         };
 
-        // const document = await Document.create(queryDetailsII);
+        const document = await Document.create(queryDetailsII);
 
         const link = 'https://hr-app3.netlify.com/signature';
 
@@ -58,6 +55,7 @@ class Template {
 
         return sendSuccessResponse(res, 201, {
           ...template,
+          document,
           mailStatus: response,
         });
       }
