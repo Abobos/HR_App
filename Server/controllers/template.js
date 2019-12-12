@@ -45,7 +45,7 @@ class Template {
           values: `'${documentName}', ${hrId}, ${templateId}`,
         };
 
-        const document = await Document.create(queryDetailsII);
+        // const document = await Document.create(queryDetailsII);
 
         const link = 'https://hr-app3.netlify.com/signature';
 
@@ -58,7 +58,6 @@ class Template {
 
         return sendSuccessResponse(res, 201, {
           ...template,
-          document,
           mailStatus: response,
         });
       }
