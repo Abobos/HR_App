@@ -28,7 +28,6 @@ class Template {
 
       const template = await TemplateResource.create(queryDetailsI);
 
-
       let queryDetailsII;
 
       if (action === 'send') {
@@ -37,7 +36,6 @@ class Template {
           values: `'${template.name}', ${hrId}, ${template.id}`,
         };
 
-       
         const link = 'https://hr-app3.netlify.com/signature';
 
         const response = await MailHandler.sendEmail(
@@ -47,12 +45,10 @@ class Template {
           link,
         );
 
-
-        const document = await Document.create(queryDetailsII);
+        // const document = await Document.create(queryDetailsII);
 
         return sendSuccessResponse(res, 201, {
           ...template,
-          document,
           mailStatus: response,
         });
       }
@@ -100,7 +96,7 @@ class Template {
     }
   }
 
-   static async getTemplate(req, res, next) {
+  static async getTemplate(req, res, next) {
     try {
       const { id: templateId } = req.params;
 
@@ -110,8 +106,6 @@ class Template {
       };
 
       const templates = await TemplateResource.select(queryDetailsI);
-
-
 
       sendSuccessResponse(res, 200, templates.rows);
     } catch (e) {
