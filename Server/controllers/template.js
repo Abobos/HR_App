@@ -53,8 +53,6 @@ class Template {
         );
 
 
- const document = await Document.create(queryDetailsII);
-
         return sendSuccessResponse(res, 201, {
           ...template,
           document,
